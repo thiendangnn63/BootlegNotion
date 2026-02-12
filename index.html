@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootleg Calendar</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Bootleg Calendar</h1>
+        <div class="nav-links">
+            <span id="user-email-display" class="small-text" style="align-self: center; margin-right: 10px; color: var(--text-muted); display: none;"></span>
+            <a id="auth-btn" class="btn btn-nav" href="/login">Login</a>
+            <a class="btn btn-nav" href="https://www.linkedin.com/in/thiendangnn63/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn btn-nav" href="https://github.com/thiendangnn63" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </nav>
+    <div class="main-grid">
+
+        <section class="panel" id="panel-home">
+            <h2>Upcoming events</h2>
+            <p style="margin-bottom: 1rem;">View, tweak, and sync with Google Calendar.</p>
+            
+            <div class="events-toolbar">
+                <button class="btn btn-secondary" id="toggle-all-events" style="min-width: 7rem;">Select all</button>
+                <button class="btn btn-secondary" onclick="bulkDelete()" style="color: var(--danger-red);">Delete selected</button>
+                <button class="btn btn-secondary" style="background-color: var(--primary-blue);" id="btn-refresh">Refresh</button>
+            </div>
+            
+            <div id="events-list-container">
+                 <div class="empty-state">
+                    Loading...
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="panel-upload">
+            <h2>Upload syllabus</h2>
+            <p style="margin-bottom: 1rem;">Drop a file, choose event types, preview found events.</p>
+            
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom: 1rem;">
+                <button class="btn btn-primary" style="width: 5rem;" id="btn-parse">Parse</button>
+                <span class="small-text" id="file-name-display" style="color:var(--text-muted)">No file selected</span>
+            </div>
+
+            <div class="drop-zone" id="drop-zone">
+                <input type="file" id="file-input" style="display: none;" accept=".pdf,.txt,.docx">
+                <p>Browse or drop a syllabus file</p>
+                <button class="btn btn-secondary" style="margin-top: 0.5rem; font-size: 0.75rem;" id="btn-browse">Choose file</button>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 class="section-header">What to extract</h3>
+                
+                <div class="extract-grid" id="extract-checkboxes">
+                    <label class="container">Exams
+                        <input type="checkbox" value="Exams">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Lectures/Classes
+                        <input type="checkbox" value="Lectures/Classes">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Assignments
+                        <input type="checkbox" value="Assignments">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Quizzes
+                        <input type="checkbox" value="Quizzes">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Project Deadlines
+                        <input type="checkbox" value="Project Deadlines">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Breaks
+                        <input type="checkbox" value="Breaks">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+
+             <div style="margin-bottom: 1.5rem;">
+                <h3 class="section-header">Event Color</h3>
+                <select id="event-color-select" style="width: 100%;">
+                    <option value="random">Random (Default)</option>
+                    <option value="1">Lavender</option>
+                    <option value="2">Sage</option>
+                    <option value="3">Grape</option>
+                    <option value="4">Flamingo</option>
+                    <option value="5">Banana</option>
+                    <option value="6">Tangerine</option>
+                    <option value="7">Peacock</option>
+                    <option value="8">Graphite</option>
+                    <option value="9">Blueberry</option>
+                    <option value="10">Basil</option>
+                    <option value="11">Tomato</option>
+                </select>
+            </div>
+
+            <div class="preview-box">
+                <h3 style="color: var(--text-muted); margin-bottom: 0.5rem;">Events Preview</h3>
+                <div id="preview-list">
+                    <p class="small-text" style="font-style: italic;">No parsed events yet.</p>
+                </div>
+                <div id="preview-actions" style="display:none; margin-top:1rem; text-align:right;">
+                     <button class="btn btn-primary" id="btn-sync-calendar">Add to Calendar</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="panel-settings" style="overflow: hidden;">
+            <h2>Settings</h2>
+            <p style="margin-bottom: 1.5rem;">Configure default reminders.</p>
+
+            <div style="flex: 1; overflow-y: auto; padding-right: 5px; min-height: 0;">
+                <div class="settings-header">
+                    <h3>Default Reminders</h3>
+                    <button class="btn" style="background-color: var(--primary-blue); font-size: 0.75rem; padding: 0.25rem 0.5rem;" id="btn-save-settings">Save All</button>
+                </div>
+                <div id="reminder-settings-container">
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

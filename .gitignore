@@ -1,0 +1,6 @@
+api.env
+flask.env
+data
+venv
+instance
+__pycache__
