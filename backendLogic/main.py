@@ -12,7 +12,6 @@ from flask_cors import CORS
 from backendLogic.auth import auth_bp
 from dotenv import dotenv_values
 
-# Robust path handling for deployment
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 env_path = os.path.join(BASE_DIR, 'flask.env')
 
@@ -70,7 +69,7 @@ def get_user():
     })
 
 @app.route('/api/analyze', methods=['POST'])
-@limiter.limit("5 per hour")
+@limiter.limit("20 per minute")
 def analyze_syllabus():
     if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
