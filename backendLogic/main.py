@@ -4,23 +4,25 @@ import json
 
 from flask import Flask, request, jsonify, send_from_directory, session
 from google.oauth2.credentials import Credentials
-from backendLogic.calendarIntegration import GoogleCalendarClient
+from calendarIntegration import GoogleCalendarClient
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from backendLogic.syllabus import SyllabusAnalyzer
+from syllabus import SyllabusAnalyzer
 from flask_cors import CORS
-from backendLogic.auth import auth_bp
+from auth import auth_bp
 from dotenv import dotenv_values
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-env_path = os.path.join(BASE_DIR, 'flask.env')
+
+flask_env_paths = [os.path.join(BASE_DIR, 'flask.env'), '/etc/secrets/flask.env']
+flask_config = {}
+for path in flask_env_paths:
+    if os.path.exists(path):
+        flask_config = dotenv_values(path)
+        break
 
 app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
-# Fix for running behind a proxy (like Render/Nginx) so IP addresses are correct
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
-
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", dotenv_values(env_path).get('FLASK_SECRET_KEY', "dev_unsafe_key_fallback"))
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", flask_config.get('FLASK_SECRET_KEY', "dev_unsafe_key_fallback"))
 app.register_blueprint(auth_bp)
 
 CORS(app, resources={

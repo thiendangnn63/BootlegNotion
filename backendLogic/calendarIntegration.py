@@ -42,7 +42,6 @@ class GoogleCalendarClient:
         return results
 
     def updateEvents(self, events):
-        # TODO: find a use for ts cuz idk what to do with this
         pass
 
     def deleteEvents(self, event_ids):
