@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Blueprint, redirect, url_for, session, request
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
@@ -14,26 +15,45 @@ SCOPES = [
     'openid'
 ]
 
+def get_flow(**kwargs):
+    # Use absolute path for robustness on AWS/Linux servers
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    creds_path = os.path.join(BASE_DIR, 'data', 'street_creds_web.json')
+    
+    if os.path.exists(creds_path):
+        return Flow.from_client_secrets_file(
+            creds_path,
+            scopes=SCOPES,
+            **kwargs
+        )
+    
+    creds_json = os.environ.get('GOOGLE_CREDENTIALS_JSON')
+    if creds_json:
+        try:
+            config = json.loads(creds_json)
+            return Flow.from_client_config(
+                config,
+                scopes=SCOPES,
+                **kwargs
+            )
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON in GOOGLE_CREDENTIALS_JSON: {e}")
+            
+    raise FileNotFoundError("Google credentials not found. Upload 'data/street_creds_web.json' or set 'GOOGLE_CREDENTIALS_JSON' env var.")
+
 @auth_bp.route('/login')
 def login():
     try:
-        # Use absolute path for robustness on AWS/Linux servers
-        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        creds_path = os.path.join(BASE_DIR, 'data', 'street_creds_web.json')
+        flow = get_flow(redirect_uri=url_for('auth.callback', _external=True))
         
-        flow = Flow.from_client_secrets_file(
-            creds_path,
-            scopes=SCOPES,
-            redirect_uri=url_for('auth.callback', _external=True)
-        )
         authorization_url, state = flow.authorization_url(
             access_type='offline',
             include_granted_scopes='true'
         )
         session['state'] = state
         return redirect(authorization_url)
-    except FileNotFoundError:
-        return "Error: data/street_creds_web.json not found. Please configure Google OAuth.", 500
+    except FileNotFoundError as e:
+        return f"Configuration Error: {str(e)}", 500
     except Exception as e:
         return f"Error during login init: {str(e)}", 500
 
@@ -44,11 +64,7 @@ def callback():
         return redirect('/login')
 
     try:
-        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        creds_path = os.path.join(BASE_DIR, 'data', 'street_creds_web.json')
-        flow = Flow.from_client_secrets_file(
-            creds_path,
-            scopes=SCOPES,
+        flow = get_flow(
             state=state,
             redirect_uri=url_for('auth.callback', _external=True)
         )
