@@ -7,7 +7,12 @@ from dotenv import dotenv_values
 
 class SyllabusAnalyzer:
     def __init__(self, file, categories=None, colorId='1'):
-        self.API_KEYS = dotenv_values("api.env").values()
+        # Fix path for api.env
+        import os
+        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        env_path = os.path.join(BASE_DIR, "api.env")
+        
+        self.API_KEYS = dotenv_values(env_path).values()
         self.MODELS = [
             "gemini-2.5-flash",
             "gemini-2.5-flash-lite",

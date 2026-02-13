@@ -4,16 +4,20 @@ import json
 
 from flask import Flask, request, jsonify, send_from_directory, session
 from google.oauth2.credentials import Credentials
-from calendarIntegration import GoogleCalendarClient
+from backendLogic.calendarIntegration import GoogleCalendarClient
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from syllabus import SyllabusAnalyzer
+from backendLogic.syllabus import SyllabusAnalyzer
 from flask_cors import CORS
-from auth import auth_bp
+from backendLogic.auth import auth_bp
 from dotenv import dotenv_values
 
-app = Flask(__name__, static_folder='../', static_url_path='')
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", dotenv_values("flask.env").get('FLASK_SECRET_KEY', "dev_unsafe_key_fallback"))
+# Robust path handling for deployment
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+env_path = os.path.join(BASE_DIR, 'flask.env')
+
+app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", dotenv_values(env_path).get('FLASK_SECRET_KEY', "dev_unsafe_key_fallback"))
 app.register_blueprint(auth_bp)
 
 CORS(app, resources={
@@ -31,11 +35,11 @@ limiter = Limiter(
 
 @app.route('/')
 def index():
-    return send_from_directory('../', 'index.html')
+    return send_from_directory(BASE_DIR, 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('../', path)
+    return send_from_directory(BASE_DIR, path)
 
 @app.route('/api/events', methods=['GET'])
 def get_events():

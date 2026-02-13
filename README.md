@@ -1,0 +1,35 @@
+# Bootleg Calendar
+
+> This is a project I made per suggestion by my friend **@danielnyc06** (Goat btw)
+
+## Website's Objective
+
+It's a website where you can upload your classes' syllabi and then the website will find all relevant dates (lectures, exams,...). It then adds all those events to your Google Calendar.
+
+## Usage
+
+To use the website, you will first need to login to your Google account and grant permission to edit/add events to your calendar (no viruses, I promise :D).
+
+**Interface & File Support**
+
+* On the left column will be the upcoming events that the website found in your calendar, which you can mass select to mass delete (Not sure what else to use mass select for).
+* Currently, the website only supports uploading PDF, I will add the feature for uploading .docx (.jpg and .png, too if possible) soon enough.
+
+### Reminder Settings
+
+For each event type (exam or assignments, for example), you can input reminders to apply to them:
+
+* **Custom Reminders:** For example, you add 2 reminders: 1 hour and 2 hours before exam. The website will add said event with those specific reminders to your calendar.
+* **Event Types:** Each type of event have their own default reminder, so you can set them for each type.
+* **Constraints:**
+* The maximum value for reminder input is **40320 minutes** (4 weeks) because it's the maximum value allowed by Google Calendar.
+* If no reminder is specified, it automatically uses the default reminder from Google Calendar (30 minutes before the event).
+
+*I'm currently not sure if adding the feature to set reminder for individual events is necessary, please let me know!*
+*Also, because I don't have a budget, I limited each user to around 5 syllabi parses, sorry!*
+
+---
+
+The rest is pretty intuitive, shoot me a message on IG if you don't understand something, **@36dtnn**.
+
+**Thanks for using my website, please star this repository if it helped you!**

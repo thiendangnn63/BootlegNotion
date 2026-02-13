@@ -17,7 +17,9 @@ SCOPES = [
 @auth_bp.route('/login')
 def login():
     try:
-        creds_path = os.path.join(os.getcwd(), 'data', 'street_creds_web.json')
+        # Use absolute path for robustness on AWS/Linux servers
+        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        creds_path = os.path.join(BASE_DIR, 'data', 'street_creds_web.json')
         
         flow = Flow.from_client_secrets_file(
             creds_path,
@@ -42,7 +44,8 @@ def callback():
         return redirect('/login')
 
     try:
-        creds_path = os.path.join(os.getcwd(), 'data', 'street_creds_web.json')
+        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        creds_path = os.path.join(BASE_DIR, 'data', 'street_creds_web.json')
         flow = Flow.from_client_secrets_file(
             creds_path,
             scopes=SCOPES,

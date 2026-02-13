@@ -1,0 +1,9 @@
+Flask
+Flask-Cors
+Flask-Limiter
+google-auth
+google-auth-oauthlib
+google-api-python-client
+python-dotenv
+google-genai
+gunicorn
