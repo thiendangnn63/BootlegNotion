@@ -8,7 +8,7 @@ from dotenv import dotenv_values
 class SyllabusAnalyzer:
     def __init__(self, file, categories=None, colorId='1'):
         import os
-        BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         
         api_env_paths = [os.path.join(BASE_DIR, "api.env"), '/etc/secrets/api.env']
         api_keys = []

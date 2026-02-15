@@ -1,6 +1,5 @@
 import os
 import tempfile
-import json
 
 from flask import Flask, request, jsonify, send_from_directory, session
 from google.oauth2.credentials import Credentials
@@ -12,7 +11,7 @@ from flask_cors import CORS
 from auth import auth_bp
 from dotenv import dotenv_values
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 flask_env_paths = [os.path.join(BASE_DIR, 'flask.env'), '/etc/secrets/flask.env']
 flask_config = {}

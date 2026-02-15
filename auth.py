@@ -1,5 +1,4 @@
 import os
-import flask
 import json
 from flask import Blueprint, redirect, url_for, session, request
 from google_auth_oauthlib.flow import Flow
@@ -29,7 +28,7 @@ def login():
                 redirect_uri=url_for('auth.callback', _external=True)
             )
         else:
-            BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
             creds_path = os.path.join(BASE_DIR, 'data', 'street_creds_web.json')
             
             flow = Flow.from_client_secrets_file(

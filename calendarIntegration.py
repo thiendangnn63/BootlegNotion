@@ -6,7 +6,7 @@ class GoogleCalendarClient:
         self.service = build('calendar', 'v3', credentials=credentials)
 
     def fetchEvents(self, max_results=50):
-        now = datetime.datetime.utcnow().isoformat() + 'Z'
+        now = datetime.datetime.now().isoformat() + 'Z'
         try:
             events_result = self.service.events().list(
                 calendarId='primary', timeMin=now,
